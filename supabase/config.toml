@@ -242,7 +242,7 @@ host = "smtp.resend.com"
 port = 587
 user = "resend"
 pass = "env(SUPABASE_AUTH_SMTP_PASS)"
-admin_email = "onboarding@resend.dev"
+admin_email = "noreply@boilercard.app"
 sender_name = "BoilerCard"
 
 # Uncomment to customize email template
