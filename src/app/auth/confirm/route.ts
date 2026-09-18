@@ -18,3 +18,12 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.redirect(new URL("/login?error=invalid-link", request.url));
 }
+
+// Without an explicit HEAD handler, Next.js falls back to running GET for
+// HEAD requests — which means link-scanning bots (Outlook Safe Links,
+// Microsoft Defender) silently consume the single-use OTP token before the
+// user ever clicks the link, by sending a HEAD probe first. Respond to HEAD
+// with a no-op so probing doesn't burn the token.
+export async function HEAD() {
+  return new NextResponse(null, { status: 200 });
+}
