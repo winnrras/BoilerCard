@@ -1,6 +1,11 @@
 import { type EmailOtpType } from "@supabase/supabase-js";
+import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+
+// Never cache this route — it mutates cookies based on a one-time token in
+// the query string, and a cached response would strip the Set-Cookie header
+// entirely (or serve a stale redirect to a different visitor).
+export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -9,10 +14,37 @@ export async function GET(request: NextRequest) {
   const next = searchParams.get("next") ?? "/dashboard";
 
   if (token_hash && type) {
-    const supabase = await createClient();
+    // Build the redirect response up front and thread it through the cookie
+    // handlers (the same pattern our proxy uses), rather than relying on
+    // `next/headers` cookies() to implicitly attach to a response we
+    // construct separately — that worked in local dev but the session
+    // cookie wasn't reliably reaching the browser on Vercel's runtime.
+    let response = NextResponse.redirect(new URL(next, request.url));
+
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) =>
+              request.cookies.set(name, value),
+            );
+            response = NextResponse.redirect(new URL(next, request.url));
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options),
+            );
+          },
+        },
+      },
+    );
+
     const { error } = await supabase.auth.verifyOtp({ type, token_hash });
     if (!error) {
-      return NextResponse.redirect(new URL(next, request.url));
+      return response;
     }
   }
 
