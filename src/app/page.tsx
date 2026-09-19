@@ -5,6 +5,7 @@ import { FeaturedThumbnails } from "./featured-thumbnails";
 import { FeaturedClubs } from "./featured-clubs";
 import { SearchBar } from "./search-bar";
 import { NavMenu } from "./nav-menu";
+import { SectionLabel } from "./section-label";
 
 const PLACEHOLDER_COUNT = 4;
 
@@ -73,16 +74,10 @@ export default async function Home() {
       </section>
 
       <div className="flex flex-col gap-3 pb-2 sm:gap-4">
-        {clubs && clubs.length > 0 && (
-          <p className="px-6 text-xs font-medium uppercase tracking-wide text-[#948C79] sm:px-10">
-            Clubs
-          </p>
-        )}
+        {clubs && clubs.length > 0 && <SectionLabel>Clubs</SectionLabel>}
         <FeaturedClubs clubs={clubs ?? []} />
 
-        <p className="px-6 text-xs font-medium uppercase tracking-wide text-[#948C79] sm:px-10">
-          People
-        </p>
+        <SectionLabel>People</SectionLabel>
         <FeaturedThumbnails slots={slots} />
       </div>
     </div>
