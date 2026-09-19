@@ -20,38 +20,6 @@ body {
   overflow-x: hidden;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: -20%;
-  z-index: -1;
-  pointer-events: none;
-  background:
-    radial-gradient(38% 28% at 18% 22%, rgba(191, 169, 126, 0.12), transparent 60%),
-    radial-gradient(32% 24% at 82% 28%, rgba(148, 140, 121, 0.10), transparent 60%),
-    radial-gradient(42% 32% at 50% 82%, rgba(191, 169, 126, 0.07), transparent 60%);
-  filter: blur(60px);
-  animation: boilercard-drift 26s ease-in-out infinite alternate;
-}
-
-@keyframes boilercard-drift {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(-3%, 2%, 0) scale(1.06);
-  }
-  100% {
-    transform: translate3d(3%, -2%, 0) scale(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body::before {
-    animation: none;
-  }
-}
-
 html {
   scroll-behavior: auto;
 }
