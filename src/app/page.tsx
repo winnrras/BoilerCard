@@ -73,7 +73,16 @@ export default async function Home() {
       </section>
 
       <div className="flex flex-col gap-3 pb-2 sm:gap-4">
+        {clubs && clubs.length > 0 && (
+          <p className="px-6 text-xs font-medium uppercase tracking-wide text-[#948C79] sm:px-10">
+            Clubs
+          </p>
+        )}
         <FeaturedClubs clubs={clubs ?? []} />
+
+        <p className="px-6 text-xs font-medium uppercase tracking-wide text-[#948C79] sm:px-10">
+          People
+        </p>
         <FeaturedThumbnails slots={slots} />
       </div>
     </div>
