@@ -79,7 +79,7 @@ is free to set up via the Google Wallet Console and isn't blocked the same way.
 
 ## Visual identity
 
-- Colors: ink `#121110` (background, warm near-black, not flat #000), panel
+- Colors: ink `#16130b` (background, warm near-black, not flat #000), panel
   `#1B1912` (card surface), gold `#BFA97E` (accent only — links, tags, never a
   filled background block), paper `#F4F1E8` (primary text), ash `#948C79`
   (secondary text)
