@@ -7,7 +7,9 @@ employer-facing tool. No monetization, no multi-university ambitions.
 ## Stack
 
 - Next.js (App Router) + TypeScript, Tailwind CSS
-- Supabase: Auth (magic-link email, restricted to @purdue.edu), Postgres, Storage (resume uploads)
+- Supabase: Auth (email + password for now, restricted to @purdue.edu — Purdue's mail security made
+  magic-link email unreliable in practice; plan is to migrate to Purdue SSO via Microsoft Entra ID
+  once that's set up officially), Postgres, Storage (resume uploads)
 - Deployed on Vercel
 
 ## Data model
@@ -52,7 +54,7 @@ BoilerLink; don't rebuild it.
 
 ## Core flow
 
-1. Sign in with @purdue.edu (Supabase Auth magic link)
+1. Sign in with @purdue.edu email + password (Supabase Auth)
 2. Build profile — name pulled from account; photo, major, grad year all
    optional and fillable later so nobody is blocked from finishing signup
 3. Get a shareable profile URL (`/u/[slug]`) with an auto-generated QR code

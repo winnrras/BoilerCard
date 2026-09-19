@@ -158,11 +158,11 @@ enabled = true
 enabled = true
 # The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
 # in emails.
-site_url = "http://localhost:3000"
+site_url = "https://boilercard.vercel.app"
 # The public URL that Auth serves on. Defaults to the API external URL with `/auth/v1` appended.
 # external_url = ""
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = []
+additional_redirect_urls = ["https://boilercard.vercel.app/**"]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
 # JWT issuer URL. If not set, defaults to auth.external_url.
@@ -224,8 +224,11 @@ enable_signup = true
 # If enabled, a user will be required to confirm any email change on both the old, and new email
 # addresses. If disabled, only the new email is required to confirm.
 double_confirm_changes = true
-# If enabled, users need to confirm their email address before signing in.
-enable_confirmations = true
+# Sign-in is email + password for now (Purdue's mail security made the
+# magic-link flow unreliable — quarantine delays, silent drops on a new
+# sending domain). No email round-trip needed until Purdue SSO replaces
+# this, so signup doesn't require confirming an email at all.
+enable_confirmations = false
 # If enabled, users will need to reauthenticate or have logged in recently to change their password.
 secure_password_change = false
 # Controls the minimum amount of time that must pass before sending another signup confirmation or password reset email.
@@ -235,41 +238,10 @@ otp_length = 8
 # Number of seconds before the email OTP expires (defaults to 1 hour).
 otp_expiry = 3600
 
-# Use a production-ready SMTP server
-[auth.email.smtp]
-enabled = false
-host = "smtp.resend.com"
-port = 587
-user = "resend"
-pass = "env(SUPABASE_AUTH_SMTP_PASS)"
-admin_email = "noreply@boilercard.app"
-sender_name = "BoilerCard"
-
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
-
-# The default magic link points at Supabase's own /auth/v1/verify endpoint,
-# which doesn't cooperate with our /auth/confirm route handler (needed to set
-# the session cookie server-side). Point it at our route instead.
-#
-# A brand-new signInWithOtp() user gets the "confirmation" (signup) template,
-# not "magic_link" — every returning sign-in after that uses magic_link. Both
-# need the custom link, with the matching `type` for verifyOtp.
-[auth.email.template.confirmation]
-subject = "Your BoilerCard sign-in link"
-content_path = "./supabase/templates/confirmation.html"
-
-[auth.email.template.magic_link]
-subject = "Your BoilerCard sign-in link"
-content_path = "./supabase/templates/magic_link.html"
-
-# GoTrue routes a *repeat* signInWithOtp() request for an existing-but-
-# unconfirmed user through the recovery flow rather than confirmation.
-[auth.email.template.recovery]
-subject = "Your BoilerCard sign-in link"
-content_path = "./supabase/templates/recovery.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
